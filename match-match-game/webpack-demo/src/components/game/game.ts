@@ -2,18 +2,23 @@ import { delay } from '../../shared/delay';
 import { BaseComponent } from '../base-component';
 import { Card } from '../card/card';
 import { CardsField } from '../cards-field/cards-field';
+import { TimerContainer } from '../timer/timer-container';
+import globalState from '../../shared/services/globalState';
 
-const FLIP_DELAY = 3;
 export class Game extends BaseComponent {
   private readonly cardsField: CardsField;
 
   private activeCard?: Card;
+
+  private timer: TimerContainer;
 
   private isAnimation = false;
 
   constructor() {
     super();
     this.cardsField = new CardsField();
+    this.timer = new TimerContainer();
+    this.element.appendChild(this.timer.element);
 
     this.element.appendChild(this.cardsField.element);
   }
@@ -28,6 +33,7 @@ export class Game extends BaseComponent {
     cards.forEach((card) => card.element.addEventListener('click', () => this.cardHandler(card)));
 
     this.cardsField.addCards(cards);
+    this.timer.timer.setShowTimer();
   }
 
   private async cardHandler(card: Card) {
@@ -44,7 +50,7 @@ export class Game extends BaseComponent {
     }
 
     if (this.activeCard.image !== card.image) {
-      await delay(FLIP_DELAY);
+      await delay(globalState.settings.FLIP_DELAY * 1000);
       await Promise.all([this.activeCard.flipToBack(), card.flipToBack()]);
     }
 

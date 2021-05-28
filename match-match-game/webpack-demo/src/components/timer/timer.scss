@@ -1,0 +1,20 @@
+.card-timer{
+  display: flex;
+  flex-direction: column;
+  width: 256px;
+  height: 64px;
+  margin: 25px auto 40px auto;
+
+  align-items: center;
+
+  border-radius: 25px;
+  background-color: #43A56E;
+}
+.timer {
+  padding-top: 15px;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 30px;
+  color: #0B5C2E;
+  background: transparent;
+}

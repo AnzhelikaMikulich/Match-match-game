@@ -4,8 +4,8 @@ import { ImageCategoryModel } from './models/image-category-models';
 
 export class App {
   private readonly game: Game;
-  private readonly about: AboutWrapper;
 
+  private readonly about: AboutWrapper;
 
   constructor(private readonly rootElement: HTMLElement) {
     this.about = new AboutWrapper();

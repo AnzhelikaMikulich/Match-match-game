@@ -1,3 +1,3 @@
-export class aboutPage {
-  constructor() {}
-}
+// export class aboutPage {
+//   constructor() {}
+// }

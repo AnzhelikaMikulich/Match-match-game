@@ -2,7 +2,7 @@ import { BaseComponent } from '../base-component';
 import { Card } from '../card/card';
 import './cards-field.scss';
 
-const SHOW_TIME = 30;
+const SHOW_TIME = 5;
 export class CardsField extends BaseComponent {
   private cards: Card[] = [];
 
