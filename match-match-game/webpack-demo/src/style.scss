@@ -12,7 +12,22 @@ body {
   justify-content: center;
   background-color: #1C8349;;
   color: white;
+  flex-direction: column;
 }
+.header {
+  display: flex;
+
+}
+.header-container{
+   max-width: 1440px;
+   display: flex;
+   justify-content: space-around;
+}
+.header-nav-list{
+  cursor: pointer;
+  display: flex;
+}
+
 .cards-field {
   width: 70%;
   margin: 0 auto;
