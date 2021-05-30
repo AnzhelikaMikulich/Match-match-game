@@ -9,9 +9,11 @@ export class App {
   private readonly header: Header;
 
   private readonly game: Game;
+
   private readonly main: MainContainer;
 
   private readonly about: AboutWrapper;
+
   private readonly settings: Settings;
 
   constructor(private readonly rootElement: HTMLElement) {
@@ -25,37 +27,34 @@ export class App {
 
     this.rootElement.appendChild(this.main.element);
   }
+
   buildFirstPage() {
     this.buildAboutPage();
     this.settings.initInputs();
-    this.header.Form.element.addEventListener("submit", () =>
-      this.about.deployBtn(this.about.element)
-    );
+    this.header.Form.element.addEventListener('submit', () => this.about.deployBtn(this.about.element));
     this.about.deployBtn(this.about.element);
-    this.about.playbtn.element.addEventListener("click", () => this.start());
-    this.header.Container.nav.list.About.element.addEventListener("click", () =>
-      this.buildAboutPage()
-    );
+    this.about.playbtn.element.addEventListener('click', () => this.start());
+    this.header.Container.nav.list.About.element.addEventListener('click', () => this.buildAboutPage());
     this.header.Container.nav.list.Settings.element.addEventListener(
-      "click",
-      () => this.buildSettingsPage()
+      'click',
+      () => this.buildSettingsPage(),
     );
   }
 
   buildSettingsPage() {
     this.cleanMain();
     this.main.element.appendChild(this.settings.element);
-    this.header.Container.nav.list.goToPage("settings");
+    this.header.Container.nav.list.goToPage('settings');
   }
 
   buildAboutPage() {
     this.cleanMain();
     this.main.element.appendChild(this.about.element);
-    this.header.Container.nav.list.goToPage("about");
+    this.header.Container.nav.list.goToPage('about');
   }
 
   cleanMain() {
-    this.main.element.innerHTML = "";
+    this.main.element.innerHTML = '';
   }
 
   async start() {

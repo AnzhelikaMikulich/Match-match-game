@@ -1,7 +1,7 @@
-import { BaseComponent } from "./base-component";
-import { FormInput } from "./form-input";
-import { Button } from "./button";
-import { Input } from "./input";
+import { BaseComponent } from './base-component';
+import { FormInput } from './form-input';
+import { Button } from './button';
+import { Input } from './input';
 
 export class FormContainer extends BaseComponent {
   private forminputs?: FormInput[];
@@ -23,7 +23,7 @@ export class FormContainer extends BaseComponent {
   }
 
   constructor() {
-    super("div", ["form-container"]);
+    super('div', ['form-container']);
   }
 
   createInputs() {
@@ -39,8 +39,8 @@ export class FormContainer extends BaseComponent {
     id: string,
     type: string,
     require = false,
-    placeholder = "",
-    value = ""
+    placeholder = '',
+    value = '',
   ) {
     this.inputs.push(new Input(styles, id, type, require, placeholder, value));
   }
@@ -59,9 +59,9 @@ export class FormContainer extends BaseComponent {
     id: string,
     type: string,
     require = false,
-    placeholder = "",
-    value = "",
-    fstyle: string[]
+    placeholder = '',
+    value = '',
+    fstyle: string[],
   ) {
     this.forminputs.push(
       new FormInput(
@@ -72,8 +72,8 @@ export class FormContainer extends BaseComponent {
         require,
         placeholder,
         value,
-        fstyle
-      )
+        fstyle,
+      ),
     );
   }
 }
