@@ -14,10 +14,10 @@ export class ChallengerContainer extends BaseComponent {
     this.element.appendChild(this.btn.element);
   }
 
-  changeToImg(src = '') {
+  changeToImg() {
     this.btn.element.remove();
     this.element.innerHTML = `
-    <img src="${src}" alt="header profile" class="header-profile">
+    <div class="header-profile"></div>
     `;
   }
 }

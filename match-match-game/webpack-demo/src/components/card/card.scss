@@ -26,6 +26,13 @@
     transform: rotateY(180deg) translateX(-100%);
     transform-origin: left;
   }
+  &.red-card > .card  > .card-front{
+    background-color: red;
+  }
+
+  &.green-card > .card > .card-front{
+    background-color: green;
+  }
 }
 .card {
   position: relative;
@@ -60,5 +67,31 @@
     background-position: center;
     background-size: cover;
     transform: rotateY(180deg);
+  }
+}
+
+.cards-container {
+  margin: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1 0 10%;
+  perspective: 28rem;
+  cursor: pointer;
+
+  &:hover > .card {
+    transform: translateZ(2rem);
+    box-shadow: 0 0.5rem 1rem black;
+  }
+  &.flipped > .card {
+    transform: rotateY(180deg) translateX(-100%);
+    transform-origin: left;
+  }
+  &.red-card > .card  > .card-front{
+    background-color: red;
+  }
+
+  &.green-card > .card > .card-front{
+    background-color: green;
   }
 }

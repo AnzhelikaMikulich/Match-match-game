@@ -19,9 +19,9 @@ export class HeaderNavList extends BaseComponent {
   constructor() {
     super('ul', ['header-nav-list']);
     this.paths = [
-      new HeaderNavItem('about', 'about-logo.jpg', 'About Game'),
-      new HeaderNavItem('best', 'best-icon.jpg', 'Best Score'),
-      new HeaderNavItem('settings', 'settings-icon.jpg', 'Game Settings'),
+      new HeaderNavItem('about', 'About Game'),
+      new HeaderNavItem('best', 'Best Score'),
+      new HeaderNavItem('settings', 'Game Settings'),
     ];
     this.paths.forEach((path) => this.element.appendChild(path.element));
   }

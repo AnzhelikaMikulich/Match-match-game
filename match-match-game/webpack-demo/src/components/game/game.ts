@@ -6,6 +6,12 @@ import { TimerContainer } from '../timer/timer-container';
 import globalState from '../../shared/services/globalState';
 
 export class Game extends BaseComponent {
+  private scoreData = {
+    total: 0,
+    mistakes: 0,
+    left: globalState.settings.number,
+    time: 0,
+  };
   private readonly cardsField: CardsField;
 
   private activeCard?: Card;
@@ -50,11 +56,30 @@ export class Game extends BaseComponent {
     }
 
     if (this.activeCard.image !== card.image) {
+      this.handleMistake(this.activeCard, card);
       await delay(globalState.settings.FLIP_DELAY * 1000);
       await Promise.all([this.activeCard.flipToBack(), card.flipToBack()]);
+      this.activeCard.element.classList.remove("red-card");
+      card.element.classList.remove("red-card");
+    }else{
+      this.handleHit(this.activeCard, card);
     }
 
     this.activeCard = undefined;
     this.isAnimation = false;
+  }
+  handleMistake(card1: Card, card2: Card) {
+    card2.element.classList.add("red-card");
+    card1.element.classList.add("red-card");
+    this.scoreData.mistakes += 1;
+    this.scoreData.total += 1;
+    console.log(this.scoreData);
+  }
+  handleHit(card1: Card, card2: Card) {
+    card1.element.classList.add("green-card");
+    card2.element.classList.add("green-card");
+    this.scoreData.total += 1;
+    this.scoreData.left -= 1;
+    console.log(this.scoreData);
   }
 }

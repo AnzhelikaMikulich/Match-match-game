@@ -6,10 +6,10 @@ export class HeaderNavItem extends BaseComponent {
 
   private name: string;
 
-  constructor(page: string, img: string, text: string) {
+  constructor(page: string, text: string) {
     super('li', ['header-nav-item']);
     this.name = page;
-    this.item = new NavItem(page, img, text);
+    this.item = new NavItem(page, text);
     this.element.appendChild(this.item.element);
   }
 
