@@ -21,5 +21,28 @@
       "city17.jpg",
       "city18.jpg"
     ]
+  },
+  {
+    "category": "animals",
+    "images": [
+      "animal1.jpg",
+      "animal2.jpg",
+      "animal3.jpg",
+      "animal4.jpg",
+      "animal5.jpg",
+      "animal6.jpg",
+      "animal7.jpg",
+      "animal8.jpg",
+      "animal9.jpg",
+      "animal10.jpg",
+      "animal11.jpg",
+      "animal12.jpg",
+      "animal13.jpg",
+      "animal14.jpg",
+      "animal15.jpg",
+      "animal16.jpg",
+      "animal17.jpg",
+      "animal18.jpg"
+    ]
   }
 ]
