@@ -1,5 +1,3 @@
-import './card.scss';
-
 import { BaseComponent } from './base-component';
 
 const FLIP_CLASS = 'flipped';
@@ -8,23 +6,25 @@ export class Card extends BaseComponent {
   isFlipped = false;
 
   constructor(readonly image: string) {
-    super('div', ['cards-container']);
+    super('div', ['card-container']);
     this.element.innerHTML = `
     <div class="card">
-        <div class="card__front" style = "background-image: url('./images/${image}')"></div>
-        <div class="card__back"></div>
+          <div class="card__front" style="background-image:url('images/${image}')"></div>
+          <div class="card__back"></div>
+          <div class="state state-right none-state"></div>
+          <div class="state state-wrong none-state"></div>
       </div>
     `;
   }
 
-  flipToBack() {
+  flipToBack(): Promise<void> {
     this.isFlipped = true;
     return this.flip(true);
   }
 
-  flipToFront() {
+  flipToFront(): Promise<void> {
     this.isFlipped = false;
-    return this.flip();
+    return this.flip(false);
   }
 
   private flip(isFront = false): Promise<void> {
@@ -34,5 +34,17 @@ export class Card extends BaseComponent {
         once: true,
       });
     });
+  }
+
+  showRightСard(): void {
+    this.element.querySelector('.state-right')?.classList.remove('none-state');
+  }
+
+  showWrongСard(): void {
+    this.element.querySelector('.state-wrong')?.classList.remove('none-state');
+  }
+
+  deleteWrongСard(): void {
+    this.element.querySelector('.state-wrong')?.classList.add('none-state');
   }
 }

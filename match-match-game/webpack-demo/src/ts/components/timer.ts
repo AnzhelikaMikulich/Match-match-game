@@ -1,24 +1,34 @@
-import './timer.scss';
 import { BaseComponent } from './base-component';
-import globalState from '../../shared/services/globalState';
 
 export class Timer extends BaseComponent {
+  private timer: ReturnType <typeof setTimeout>;
+
   constructor() {
     super('div', ['timer']);
+    this.element.innerHTML = `
+      <div class="timer__output">0:00</div>
+    `;
+    this.timer = setInterval(() => {}, 1000);
   }
 
-  setShowTimer() {
-    this.element.innerHTML = ` 0 : ${globalState.settings.SHOW_TIME}`;
-    let from = new Date().getTime() + globalState.settings.SHOW_TIME * 1000;
-    setInterval(() => {
-      const now = new Date().getTime();
-      const distance = Math.abs(from - now);
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.round((distance % (1000 * 60)) / 1000);
-      this.element.innerHTML = `${minutes} : ${seconds}`;
-      if (distance <= 0) {
-        from = new Date().getTime();
+  startTimer(): void {
+    const timerOutput: null | HTMLElement = document.querySelector('.timer__output');
+    let secInHour = 3600;
+    const oneSecond = 1;
+    const milisecInSec = 1000;
+    const secInMin = 60;
+
+    this.timer = setInterval(() => {
+      const min = (secInHour / secInMin) % secInMin;
+      const sec = (secInHour % secInMin).toLocaleString('en', { minimumIntegerDigits: 2 });
+      if (timerOutput) {
+        timerOutput.innerHTML = `${Math.trunc(min)}:${sec}`;
       }
-    }, 1000);
+      secInHour += oneSecond;
+    }, milisecInSec);
+  }
+
+  stopTimer(): void {
+    clearInterval(this.timer);
   }
 }

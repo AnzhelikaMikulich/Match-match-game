@@ -1,53 +1,52 @@
-import { delay } from '../../shared/delay';
 import { BaseComponent } from './base-component';
 import { Card } from './card';
 import { CardsField } from './cards-field';
-import { TimerContainer } from './timer-container';
-import globalState from '../../shared/services/globalState';
+import { delay } from '../../shared/delay';
+import { Timer } from './timer';
+import { WinMessage } from './win-message';
+
+const FLIP_DELAY = 1500;
 
 export class Game extends BaseComponent {
-  private scoreData = {
-    total: 0,
-    mistakes: 0,
-    left: globalState.settings.number,
-    time: 0,
-  };
-
   private readonly cardsField: CardsField;
+
+  private readonly timer: Timer;
 
   private activeCard?: Card;
 
-  private timer: TimerContainer;
-
   private isAnimation = false;
+
+  public winCounter = 0;
+
+  private readonly winMessage: WinMessage;
 
   constructor() {
     super();
+    this.timer = new Timer();
     this.cardsField = new CardsField();
-    this.timer = new TimerContainer();
-    this.element.appendChild(this.timer.element);
-
     this.element.appendChild(this.cardsField.element);
+    this.winMessage = new WinMessage();
   }
 
-  newGame(images: string[]) {
+  newGame(images: string[]): void {
+    this.timer.stopTimer();
     this.cardsField.clear();
     const cards = images
       .concat(images)
       .map((url) => new Card(url))
       .sort(() => Math.random() - 0.5);
-
-    cards.forEach((card) => card.element.addEventListener('click', () => this.cardHandler(card)));
-
+    cards.forEach((card) => {
+      card.element.addEventListener('click', () => this.cardHandler(card));
+    });
     this.cardsField.addCards(cards);
-    this.timer.timer.setShowTimer();
+    this.timer.startTimer();
   }
 
   private async cardHandler(card: Card) {
     if (this.isAnimation) return;
     if (!card.isFlipped) return;
-    this.isAnimation = true;
 
+    this.isAnimation = true;
     await card.flipToFront();
 
     if (!this.activeCard) {
@@ -56,33 +55,46 @@ export class Game extends BaseComponent {
       return;
     }
 
-    if (this.activeCard.image !== card.image) {
-      this.handleMistake(this.activeCard, card);
-      await delay(globalState.settings.FLIP_DELAY * 1000);
-      await Promise.all([this.activeCard.flipToBack(), card.flipToBack()]);
-      this.activeCard.element.classList.remove('red-card');
-      card.element.classList.remove('red-card');
+    if (this.activeCard.image !== card.image) { // Если карты не совпали
+      this.activeCard.showWrongСard();
+      card.showWrongСard();
+
+      await delay(FLIP_DELAY);
+      await Promise.all(
+        [
+          this.activeCard.flipToBack(),
+          card.flipToBack(),
+          this.activeCard.deleteWrongСard(),
+          card.deleteWrongСard(),
+        ],
+      );// Переворачиваем карты обратно
+      this.activeCard.deleteWrongСard();
+      card.deleteWrongСard();
     } else {
-      this.handleHit(this.activeCard, card);
+      this.activeCard.showRightСard();
+      card.showRightСard();
+      this.winCounter += 1;
+      if (this.winCounter === 8) {
+        this.winMessage.showWin();
+      }
     }
 
     this.activeCard = undefined;
     this.isAnimation = false;
   }
 
-  handleMistake(card1: Card, card2: Card) {
-    card2.element.classList.add('red-card');
-    card1.element.classList.add('red-card');
-    this.scoreData.mistakes += 1;
-    this.scoreData.total += 1;
-    console.log(this.scoreData);
-  }
+  closeWin(): void {
+    const winWrapper = document.querySelector('.win-popup');
+    const winClose = document.querySelector('.close-button-win');
 
-  handleHit(card1: Card, card2: Card) {
-    card1.element.classList.add('green-card');
-    card2.element.classList.add('green-card');
-    this.scoreData.total += 1;
-    this.scoreData.left -= 1;
-    console.log(this.scoreData);
+    function closeWin() {
+      if (winWrapper) winWrapper.classList.remove('active');
+    }
+
+    if (winClose) {
+      winClose.addEventListener('click', () => {
+        closeWin();
+      });
+    }
   }
 }

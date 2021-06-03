@@ -1,7 +1,7 @@
 @import "../abstract/constants";
 @import "../abstract/mixins";
 
-.score-wrapper {
+.score {
   @include page-wrapper;
 }
 
@@ -9,7 +9,7 @@ h1 {
   @include page-title;
 }
 
-.player-score {
+.top-score {
   display: flex;
   align-items: center;
   max-width: 85rem;
@@ -18,14 +18,7 @@ h1 {
   padding-left: 3rem;
   font-family: $font-family;
 
-  &__image {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    background-image: url("./assets/avatar-img.png");
-  }
-
-  &__description {
+  &__container {
     padding-left: 3rem;
 
     .name {
