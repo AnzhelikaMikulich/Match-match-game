@@ -1,6 +1,6 @@
-import { BaseComponent } from './base-component';
-import { FormInput } from './form-input';
-import globalState from '../shared/services/globalState';
+import { BaseComponent } from '../components/base-component';
+import { FormInput } from '../components/form-input';
+import globalState from '../../shared/services/globalState';
 
 export class Settings extends BaseComponent {
   private readonly inputs: FormInput[];

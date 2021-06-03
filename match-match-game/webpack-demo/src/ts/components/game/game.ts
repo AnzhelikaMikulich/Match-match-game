@@ -1,9 +1,9 @@
-import { delay } from '../../shared/delay';
+import { delay } from '../../../shared/delay';
 import { BaseComponent } from '../base-component';
 import { Card } from '../card/card';
 import { CardsField } from '../cards-field/cards-field';
 import { TimerContainer } from '../timer/timer-container';
-import globalState from '../../shared/services/globalState';
+import globalState from '../../../shared/services/globalState';
 
 export class Game extends BaseComponent {
   private scoreData = {

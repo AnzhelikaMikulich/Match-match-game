@@ -1,4 +1,4 @@
-import { BaseComponent } from '../base-component';
+import { BaseComponent } from '../components/base-component';
 
 export class Button extends BaseComponent {
   constructor(style: string[], text: string, id: string) {

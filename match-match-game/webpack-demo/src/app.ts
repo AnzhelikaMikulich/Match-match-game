@@ -1,8 +1,8 @@
-import { AboutWrapper } from './components/about/about-wrapper';
-import { Game } from './components/game/game';
-import { Header } from './components/header';
-import { MainContainer } from './components/main-container';
-import { Settings } from './components/settings';
+import { AboutWrapper } from './ts/components/about/about-wrapper';
+import { Game } from './ts/components/game/game';
+import { Header } from './ts/components/header';
+import { MainContainer } from './ts/components/main-container';
+import { Settings } from './ts/components/settings';
 import { ImageCategoryModel } from './models/image-category-models';
 
 export class App {
