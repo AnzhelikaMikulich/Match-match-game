@@ -1,71 +1,80 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const PrettierPlugin = require('prettier-webpack-plugin');
+const path = require("path");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-const devServer = (isDev) =>
-  !isDev
-    ? {}
-    : {
-        devServer: {
-          open: true,
-          hot: true,
-          port: 8080,
-          contentBase: path.join(__dirname, 'public'),
-        },
-      };
-
-const esLintPlugin = (isDev) =>
-  isDev ? [] : [new ESLintPlugin({ extensions: ['ts', 'js'] })];
-
-module.exports = ({ development }) => ({
-  mode: development ? 'development' : 'production',
-  devtool: development ? 'inline-source-map' : false,
-  entry: './src/index.ts',
+module.exports = {
+  mode: "production",
+  entry: ["babel-polyfill", "./src/scripts/index.ts"],
 
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    assetModuleFilename: 'assets/[hash][ext]',
+    filename: "scripts/bundle.js",
+    path: path.resolve(__dirname, "dist"),
   },
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    compress: true,
+    port: 9000,
+  },
+  resolve: {
+    extensions: [".js", ".ts"],
+  },
+  plugins: [
+    new HTMLWebpackPlugin({
+      template: "src/index.html",
+    }),
+    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "src/images"),
+          to: path.resolve(__dirname, "dist/images"),
+        },
+      ],
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+    }),
+  ],
   module: {
     rules: [
       {
-        test: /\.[tj]s$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
-        test: /\.(?:ico|gif|png|jpg|jpeg|svg)$/i,
-        type: 'asset/resource',
+        test: /\.ttf$/,
+        use: {
+          loader: "file-loader",
+          options: {
+            name: "[name].[ext]",
+          },
+        },
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf)$/i,
-        type: 'asset/resource',
+        test: /\.s[ac]ss$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        test: /\.(png|jpe?g|gif)$/i,
+        use: {
+          loader: "file-loader",
+          options: {
+            name: "images/[name].[ext]",
+          },
+        },
       },
       {
-        test: /\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        test: /\.ts$/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-typescript"],
+            plugins: ["@babel/plugin-proposal-class-properties"],
+          },
+        },
       },
     ],
   },
-  plugins: [
-    ...esLintPlugin(development),
-    new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
-    new PrettierPlugin(),
-    new HtmlWebpackPlugin({ template: './src/index.html' }),
-    new CopyPlugin({
-      patterns: [{ from: 'public' }],
-    }),
-  ],
-  resolve: {
-    extensions: ['.ts', '.js'],
-  },
-  ...devServer(development),
-});
+};
