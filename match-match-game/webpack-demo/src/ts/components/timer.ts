@@ -1,6 +1,6 @@
 import './timer.scss';
-import { BaseComponent } from '../base-component';
-import globalState from '../../../shared/services/globalState';
+import { BaseComponent } from './base-component';
+import globalState from '../../shared/services/globalState';
 
 export class Timer extends BaseComponent {
   constructor() {

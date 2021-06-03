@@ -1,5 +1,5 @@
 import './timer.scss';
-import { BaseComponent } from '../base-component';
+import { BaseComponent } from './base-component';
 import { Timer } from './timer';
 
 export class TimerContainer extends BaseComponent {

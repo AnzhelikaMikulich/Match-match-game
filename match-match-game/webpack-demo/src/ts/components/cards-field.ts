@@ -1,5 +1,5 @@
-import { BaseComponent } from '../base-component';
-import { Card } from '../card/card';
+import { BaseComponent } from './base-component';
+import { Card } from './card';
 import './cards-field.scss';
 
 const SHOW_TIME = 5;
