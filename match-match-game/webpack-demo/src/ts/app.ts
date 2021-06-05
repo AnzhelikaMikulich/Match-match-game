@@ -9,23 +9,25 @@ import { Popup } from './components/popup';
 import { WinMessage } from './components/win-message';
 
 export class App {
+  private readonly userData = {
+    name: "",
+    surname: "",
+    mail: "",
+    img: "",
+    score: 0,
+  };
   private readonly game: Game;
-
   private readonly timer: Timer;
-
   private readonly header: Header;
-
   private readonly aboutPage: About;
-
   private readonly scorePage: Score;
-
   private readonly settingsPage: Settings;
-
   private readonly popup: Popup;
-
   private readonly winMessage: WinMessage;
+  private request: IDBOpenDBRequest;
 
   constructor(private readonly rootElement: HTMLElement) {
+    
     this.header = new Header();
     this.game = new Game();
     this.timer = new Timer();
@@ -34,6 +36,7 @@ export class App {
     this.settingsPage = new Settings();
     this.popup = new Popup();
     this.winMessage = new WinMessage();
+    this.request = indexedDB.open("AnzhelikaMikulich", 1);
     if (this.rootElement.innerHTML === '') {
       this.rootElement.appendChild(this.header.element);
       this.rootElement.appendChild(this.aboutPage.element);
@@ -41,11 +44,47 @@ export class App {
     }
   }
 
+  
+  addProfile = () => {
+    const transaction = this.request.result.transaction(
+      "profiles",
+      "readwrite"
+    );
+    const store = transaction.objectStore("profiles");
+    
+    const person = {
+      name: this.userData.name,
+      email: this.userData.mail,
+      surname: this.userData.surname,
+      created: new Date(),
+    };
+
+    const request = store.add(person);
+
+    request.onerror = function () {
+      console.log("add Error");
+    };
+
+    request.onsuccess = function () {
+      console.log("Woot! Did it");
+    };
+  };
+
+  defineProfile = () => {
+    this.userData.name = (<HTMLInputElement>(
+      document.getElementById("formName")
+    )).value;
+    this.userData.surname = (<HTMLInputElement>(
+      document.getElementById("formSurname")
+    )).value;
+    this.userData.mail = (<HTMLInputElement>(
+      document.getElementById("formEmail")
+    )).value;
+  };
+
   async startGame(): Promise<void> {
     const res = await fetch('./images.json');
     const categories: ImageCategoryModel[] = await res.json();
-
-    // Select kind of pictures (top)
     const cat = categories[1];
     const images = cat.images.map((name) => `${cat.category}/${name}`);
     this.game.newGame(images);
