@@ -71,7 +71,7 @@ export class Popup extends BaseComponent {
       if (popupWrapper) popupWrapper.classList.remove('active');
       document.body.classList.remove('notScrollable');
     }
-  
+
     function validate() {
       if (nameInput && lastNameInput && emailInput && addButton) {
         if (nameInput.validity.valid && lastNameInput.validity.valid && emailInput.validity.valid) {

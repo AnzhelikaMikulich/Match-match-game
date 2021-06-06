@@ -1,7 +1,9 @@
 @import "../abstract/constants";
 @import "../abstract/mixins";
 
-
+:root{
+  --cardSpace: 1 0 22%;
+}
 .timer {
   margin: 3rem auto;
   width: 25.6rem;
@@ -28,7 +30,7 @@
 
 .card-container {
   margin: 1%;
-  flex: 1 0 22%;
+  flex:var(--cardSpace);
   @include center;
   justify-content:space-around;
   perspective:40rem;
@@ -82,7 +84,7 @@
 }
 
 .field-wrapper {
-  max-width:90rem;
+  // max-width:90rem;
   margin: 0 auto;
 }
 

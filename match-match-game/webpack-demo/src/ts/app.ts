@@ -7,27 +7,36 @@ import { Score } from './pages/score';
 import { Settings } from './pages/settings';
 import { Popup } from './components/popup';
 import { WinMessage } from './components/win-message';
+import globalState from '../shared/globalState';
 
 export class App {
   private readonly userData = {
-    name: "",
-    surname: "",
-    mail: "",
-    img: "",
+    name: '',
+    surname: '',
+    mail: '',
+    img: '',
     score: 0,
   };
+
   private readonly game: Game;
+
   private readonly timer: Timer;
+
   private readonly header: Header;
+
   private readonly aboutPage: About;
+
   private readonly scorePage: Score;
+
   private readonly settingsPage: Settings;
+
   private readonly popup: Popup;
+
   private readonly winMessage: WinMessage;
+
   private request: IDBOpenDBRequest;
 
   constructor(private readonly rootElement: HTMLElement) {
-    
     this.header = new Header();
     this.game = new Game();
     this.timer = new Timer();
@@ -36,7 +45,7 @@ export class App {
     this.settingsPage = new Settings();
     this.popup = new Popup();
     this.winMessage = new WinMessage();
-    this.request = indexedDB.open("AnzhelikaMikulich", 1);
+    this.request = indexedDB.open('AnzhelikaMikulich', 1);
     if (this.rootElement.innerHTML === '') {
       this.rootElement.appendChild(this.header.element);
       this.rootElement.appendChild(this.aboutPage.element);
@@ -44,49 +53,77 @@ export class App {
     }
   }
 
-  
   addProfile = () => {
     const transaction = this.request.result.transaction(
-      "profiles",
-      "readwrite"
+      'profiles',
+      'readwrite',
     );
-    const store = transaction.objectStore("profiles");
-    
+    const store = transaction.objectStore('profiles');
+
     const person = {
       name: this.userData.name,
       email: this.userData.mail,
       surname: this.userData.surname,
       created: new Date(),
     };
-
-    const request = store.add(person);
-
-    request.onerror = function () {
-      console.log("add Error");
-    };
-
-    request.onsuccess = function () {
-      console.log("Woot! Did it");
-    };
+    store.add(person);
   };
 
   defineProfile = () => {
     this.userData.name = (<HTMLInputElement>(
-      document.getElementById("formName")
+      document.getElementById('formName')
     )).value;
     this.userData.surname = (<HTMLInputElement>(
-      document.getElementById("formSurname")
+      document.getElementById('formSurname')
     )).value;
     this.userData.mail = (<HTMLInputElement>(
-      document.getElementById("formEmail")
+      document.getElementById('formEmail')
     )).value;
   };
+
+  changeCardSize = (size: number) => {
+    let tempSpace;
+    switch (size) {
+      case 8:
+        tempSpace = '1 0 22%';
+        break;
+      case 12.5:
+        tempSpace = '1 0 18%';
+        break;
+      case 18:
+        tempSpace = '1 0 13%';
+        break;
+      default:
+        tempSpace = '1 0 22%';
+        break;
+    }
+    document.documentElement.style.setProperty('--cardSpace', tempSpace);
+  };
+
+  initInput() {
+    const sizeInput = (<HTMLInputElement> document.querySelector('#fieldType'));
+    const typeInput = (<HTMLInputElement>document.querySelector('#cardType'));
+    sizeInput.addEventListener('change', (e) => {
+      globalState.settings.number = (Number(
+        (<HTMLInputElement>e.target).value,
+      ) * Number(
+        (<HTMLInputElement>e.target).value,
+      )) / 2;
+      this.changeCardSize(globalState.settings.number);
+    });
+    typeInput.addEventListener('change', (e) => {
+      globalState.settings.type = Number(
+        (<HTMLInputElement>e.target).value,
+      );
+    });
+  }
 
   async startGame(): Promise<void> {
     const res = await fetch('./images.json');
     const categories: ImageCategoryModel[] = await res.json();
-    const cat = categories[1];
-    const images = cat.images.map((name) => `${cat.category}/${name}`);
+    const cat = categories[globalState.settings.type];
+    const images = [];
+    for (let i = 0; i < globalState.settings.number; i += 1) images.push(`${cat.category}/${cat.images[i]}`);
     this.game.newGame(images);
   }
 
@@ -108,6 +145,7 @@ export class App {
           this.rootElement.appendChild(this.header.element);
           this.rootElement.appendChild(this.settingsPage.element);
           this.rootElement.appendChild(this.popup.element);
+          this.initInput();
         },
       },
       {
