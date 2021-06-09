@@ -66,7 +66,16 @@ export class App {
       surname: this.userData.surname,
       created: new Date(),
     };
-    store.add(person);
+
+    const request = store.add(person);
+
+    request.onerror = function () {
+      console.log('add Error');
+    };
+
+    request.onsuccess = function () {
+      console.log('Woot! Did it');
+    };
   };
 
   defineProfile = () => {
@@ -112,6 +121,7 @@ export class App {
       this.changeCardSize(globalState.settings.number);
     });
     typeInput.addEventListener('change', (e) => {
+      console.log(typeInput.value);
       globalState.settings.type = Number(
         (<HTMLInputElement>e.target).value,
       );
